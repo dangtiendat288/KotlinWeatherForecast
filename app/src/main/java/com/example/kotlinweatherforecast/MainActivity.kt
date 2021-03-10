@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         tvForecast.setOnClickListener {
             intent = Intent(this@MainActivity,ForecastActivity::class.java)
-            val city = edtCity.text.toString().trim()
+            val city = tvCity.text.toString().trim()
             intent.putExtra("city",city)
             startActivity(intent)
         }
