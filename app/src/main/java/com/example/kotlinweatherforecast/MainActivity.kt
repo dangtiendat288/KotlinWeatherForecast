@@ -6,14 +6,20 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.kotlinweatherforecast.Activity.ForecastActivity
+import com.example.kotlinweatherforecast.Model.City1
+import com.example.kotlinweatherforecast.Utils.Utils
 import com.example.kotlinweatherforecast.ViewModel.WeatherViewModel
 import com.example.kotlinweatherforecast.databinding.ActivityMainBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,10 +34,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(mBinding.root)
         mWeatherViewModel = ViewModelProvider(this).get(WeatherViewModel::class.java)
         edtCity.setText("Saigon")
+        val jsonFileString = Utils.getJsonFromAssets(this,"cityList.json")
+        val gson:Gson = Gson()
+        val listCityType = object : TypeToken<List<City1>>() {}.type
+
+        val cities: List<City1> =gson.fromJson(jsonFileString,listCityType)
+        val citiesArray = arrayOfNulls<String>(cities.size)
+
+        cities.forEachIndexed {index: Int, city:City1 ->
+           citiesArray[index] = city.name
+        }
+
+        val adapter = ArrayAdapter<String>(this
+            ,android.R.layout.simple_list_item_1,citiesArray)
+        edtCity.setAdapter(adapter)
+
         mWeatherViewModel.fetchCurrentWeather("Saigon")
 
         tvForecast.setOnClickListener {
-            intent = Intent(this@MainActivity,ForecastActivity::class.java)
+            val intent = Intent(this@MainActivity,ForecastActivity::class.java)
             val city = tvCity.text.toString().trim()
             intent.putExtra("city",city)
             startActivity(intent)
@@ -46,9 +67,9 @@ class MainActivity : AppCompatActivity() {
             }
 
 //            edtCity.text.clear()
-            val rnd = Random()
-            val color: Int = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
-            llBackground.setBackgroundColor(color)
+//            val rnd = Random()
+//            val color: Int = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
+//            llBackground.setBackgroundColor(color)
             val inputManager: InputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -92,6 +113,14 @@ class MainActivity : AppCompatActivity() {
             val main = data.main!!
             val nhietdo = main.temp.toInt()
             tvTemp.text = "$nhietdo°"
+            val bgColor:Int = when {
+                nhietdo >= 30 -> R.color.hot
+                nhietdo in 25..29 -> R.color.warm
+                nhietdo in 19..24 -> R.color.cool
+                else -> R.color.cold
+            }
+            llBackground.setBackgroundColor(ContextCompat.getColor(this,bgColor))
+
 
             val tempMin = main.temp_min.toInt()
             val tempMax = main.temp_max.toInt()

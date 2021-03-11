@@ -22,7 +22,7 @@
             android:orientation="horizontal"
             android:padding="5dp">
 
-            <EditText
+            <AutoCompleteTextView
                 android:textColorHint="@color/white"
                 android:textColor="@color/white"
                 android:id="@+id/edtCity"
@@ -31,7 +31,8 @@
                 android:layout_marginStart="5dp"
                 android:layout_weight="4"
                 android:hint="Nhập tên thành phố"
-                android:inputType="text" />
+                android:inputType="text"
+                android:completionThreshold="1"/>
 
             <TextView
                 android:id="@+id/tvSearch"
@@ -137,13 +138,15 @@
                     />
 
                 <ImageView
+                    android:paddingVertical="5dp"
+                    android:scaleType="center"
                     android:id="@+id/ivStatus"
-                    android:layout_width="30dp"
+                    android:layout_width="40dp"
                     android:layout_height="30dp"
                     android:layout_alignBottom="@id/tvStatus"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="35dp"
-                    android:background="@drawable/background_iv" />
+                    android:layout_marginEnd="25dp"
+                    android:background="@drawable/background_btn" />
             </RelativeLayout>
         </LinearLayout>
 

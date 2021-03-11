@@ -5,5 +5,9 @@
     <color name="colorAccent">#efa00b</color>
     <color name="colorAccent1">#d65108</color>
     <color name="colorAccent2">#591f0a</color>
+    <color name="hot">#C62828</color>
+    <color name="cool">#0277BD</color>
+    <color name="cold">#00838F</color>
+    <color name="warm">#F9A825</color>
     <color name="white">#fff</color>
 </resources>
